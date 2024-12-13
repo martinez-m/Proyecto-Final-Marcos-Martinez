@@ -1,0 +1,44 @@
+{% extends 'tienda/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Lista de Clientes</h1>
+
+    <!-- Mostrar mensajes de éxito o error -->
+    {% if messages %}
+        <div>
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Tabla con la lista de clientes -->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ cliente.nombre }}</td>
+                    <td>{{ cliente.direccion }}</td>
+                    <td>{{ cliente.telefono }}</td>
+                    <td>{{ cliente.email }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'crear_cliente' %}" class="btn btn-primary mt-3">Crear Nuevo Cliente</a>
+</div>
+{% endblock %}

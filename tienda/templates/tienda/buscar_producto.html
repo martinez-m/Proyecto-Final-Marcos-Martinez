@@ -1,28 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Buscar Producto</title>
-</head>
-<body>
-    <h1>Buscar Producto</h1>
-    
-    <!-- Formulario de búsqueda -->
-    <form method="get" action="{% url 'buscar_producto' %}">
-        <input type="text" name="q" placeholder="Nombre del producto" value="{{ query }}">
-        <button type="submit">Buscar</button>
-    </form>
-    
-    <!-- Mostrar resultados -->
-    {% if resultados %}
-        <h2>Resultados:</h2>
+{% extends 'tienda/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Resultados de búsqueda</h1>
+    {% if productos %}
         <ul>
-            {% for producto in resultados %}
+            {% for producto in productos %}
                 <li>{{ producto.nombre }} - ${{ producto.precio }}</li>
             {% endfor %}
         </ul>
-    {% elif query %}
-        <p>No se encontraron productos que coincidan con "{{ query }}".</p>
+    {% else %}
+        <p>No se encontraron productos para "{{ query }}".</p>
     {% endif %}
-</body>
-</html>
+    <a href="{% url 'base' %}" class="btn btn-secondary mt-3">Volver al inicio</a>
+</div>
+{% endblock %}

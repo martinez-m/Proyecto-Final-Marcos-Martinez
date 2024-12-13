@@ -1,0 +1,43 @@
+{% extends 'tienda/base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Catálogo de TechParts Store</h1>
+
+        <!-- Verificar si hay productos -->
+        {% if productos %}
+            <!-- Mostrar categorías -->
+            {% for categoria in categorias %}
+                <h2 class="mt-4">{{ categoria.nombre }}</h2>
+                <p>{{ categoria.descripcion }}</p>
+
+                <!-- Tabla de productos por categoría -->
+                <table class="table table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos %}
+                            {% if producto.categoria == categoria %}
+                                <tr>
+                                    <td>{{ producto.nombre }}</td>
+                                    <td>${{ producto.precio }}</td>
+                                    <td>{{ producto.descripcion }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endfor %}
+        {% else %}
+            <p class="text-center">No hay productos registrados aún.</p>
+        {% endif %}
+
+        <a href="{% url 'base' %}" class="btn btn-primary mt-4">Volver al inicio</a>
+    </div>
+{% endblock %}
+

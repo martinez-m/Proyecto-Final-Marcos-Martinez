@@ -1,16 +1,13 @@
+{% extends 'tienda/base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Crear Pedido</title>
-</head>
-<body>
-    <h1>Crear Pedido</h1>
+{% block content %}
+<div class="container mt-5">
+    <h2>Crear Pedido</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Guardar</button>
+        <button type="submit" class="btn btn-success">Crear Pedido</button>
     </form>
-</body>
-</html>
+    <a href="{% url 'base' %}" class="btn btn-secondary mt-3">Volver al inicio</a>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}Bienvenido a TechParts Store{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h2>Bienvenido a TechParts Store</h2>
+    <p>Explorá nuestro catálogo. Para acceder a todas las funcionalidades, por favor <a href="{% url 'login' %}">inicia sesión</a> o <a href="{% url 'signup' %}">registrate</a>.</p>
+    <a href="{% url 'listar_productos' %}" class="btn btn-primary">Catálogo</a>
+</div>
+{% endblock %}
