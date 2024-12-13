@@ -60,8 +60,6 @@
         <h1>Login</h1>
         <form method="post">
             {% csrf_token %}
-            
-            <!-- Mensaje de error -->
             {% if form.errors %}
                 <p class="error-message">Usuario o contraseña incorrectos.</p>
             {% endif %}

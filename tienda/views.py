@@ -10,8 +10,8 @@ from django.contrib.auth.views import LoginView
 
 def inicio(request):
     if request.user.is_authenticated:
-        return render(request, 'tienda/inicio_autenticado.html')  # Usuario autenticado
-    return render(request, 'tienda/inicio_publico.html')  # Usuario no autenticado
+        return render(request, 'tienda/inicio_autenticado.html')
+    return render(request, 'tienda/inicio_publico.html') 
 
 def signup_view(request):
     if request.method == 'POST':
@@ -44,8 +44,8 @@ def crear_producto(request):
     if request.method == "POST":
         form = ProductoForm(request.POST)
         if form.is_valid():
-            form.save()  # Guardar el producto en la base de datos
-            messages.success(request, "Producto creado con éxito.")  # Mostrar mensaje de éxito
+            form.save()
+            messages.success(request, "Producto creado con éxito.")
         else:
             messages.error(request, "Hubo un error al crear el producto. Revisa los datos ingresados.")
     else:
@@ -59,9 +59,8 @@ def crear_cliente(request):
         form = ClienteForm(request.POST)
         if form.is_valid():
             form.save()
-            # Mensaje de éxito
             messages.success(request, "¡Cliente creado exitosamente!")
-            return redirect('base')  # Redirige al inicio
+            return redirect('base') 
     else:
         form = ClienteForm()
     return render(request, 'tienda/crear_cliente.html', {'form': form})
@@ -73,14 +72,14 @@ def crear_pedido(request):
         if form.is_valid():
             form.save()
             messages.success(request, '¡Pedido creado correctamente!')
-            return redirect('base')  # Cambia la redirección si prefieres otro destino
+            return redirect('base') 
     else:
         form = PedidoForm()
     return render(request, 'tienda/crear_pedido.html', {'form': form})
 
 def buscar_producto(request):
-    query = request.GET.get('q', '')  # Obtiene el parámetro 'q' de la URL
-    productos = Producto.objects.filter(nombre__icontains=query) if query else []  # Filtra productos que contienen el texto
+    query = request.GET.get('q', '')
+    productos = Producto.objects.filter(nombre__icontains=query) if query else []  
     return render(request, 'tienda/buscar_producto.html', {'query': query, 'productos': productos})
 
 def listar_productos(request):
@@ -101,13 +100,5 @@ def about(request):
 def productos(request):
     return render(request, 'tienda/productos.html')
 
-def login_view(request):
-    return render(request, 'tienda/login.html')
-
-
 def profile(request):
     return render(request, 'tienda/profile.html')
-
-def logout_view(request):
-    # Aquí irá el logout
-    pass

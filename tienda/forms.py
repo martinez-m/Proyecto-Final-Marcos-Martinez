@@ -16,13 +16,12 @@ class ClienteForm(forms.ModelForm):
 class PedidoForm(forms.ModelForm):
     class Meta:
         model = Pedido
-        fields = ['cliente', 'productos', 'total']  # Excluimos 'fecha', ya que se llena automáticamente
+        fields = ['cliente', 'productos', 'total'] 
         widgets = {
-            'productos': forms.CheckboxSelectMultiple()  # Permite seleccionar múltiples productos
+            'productos': forms.CheckboxSelectMultiple() 
 }
 
 class CustomUserCreationForm(forms.ModelForm):
-    # Campos personalizados para el formulario
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña'}),
         label="Contraseña"

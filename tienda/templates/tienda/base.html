@@ -29,12 +29,10 @@
                             <a class="nav-link" href="{% url 'about' %}">Sobre mí</a>
                         </li>
                     </ul>
-                    <!-- Barra de búsqueda visible en todo momento -->
                     <form class="d-flex me-3" action="{% url 'buscar_producto' %}" method="get">
                         <input class="form-control me-2" type="search" name="q" placeholder="Buscar producto" aria-label="Search">
                         <button class="btn btn-outline-primary" type="submit">Buscar</button>
                     </form>
-                    <!-- Botones de acciones según el estado de autenticación -->
                     <div class="d-flex">
                         {% if user.is_authenticated %}
                             <a class="btn btn-outline-secondary me-2" href="{% url 'crear_producto' %}">Crear Producto</a>
@@ -74,7 +72,7 @@
         <main>
             <div class="container my-4">
                 {% block content %}
-                <!-- Aquí irá el contenido específico de cada página -->
+                
                 {% endblock %}
             </div>
         </main>
