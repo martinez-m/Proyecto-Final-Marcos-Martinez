@@ -3,11 +3,67 @@
 {% block content %}
 <div class="container mt-5">
     <h2>Crear Pedido</h2>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <h4>Seleccionar Cliente y Categoría</h4>
+        <div class="form-group">
+            {{ pedido_form.as_p }}
+        </div>
+        <h4>Agregar Producto</h4>
+        <div class="form-group">
+            <label for="id_producto">Producto</label>
+            {{ detalle_form.producto }}
+        </div>
+        <h4>Cantidad</h4>
+        <div class="form-group">
+            <label for="id_cantidad">Cantidad</label>
+            {{ detalle_form.cantidad }}
+        </div>
         <button type="submit" class="btn btn-success">Crear Pedido</button>
     </form>
     <a href="{% url 'base' %}" class="btn btn-secondary mt-3">Volver al inicio</a>
 </div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var categoriaSelect = document.getElementById('id_categoria');
+    categoriaSelect.addEventListener('change', function () {
+        var categoriaId = this.value;  
+        if (!categoriaId) {
+            document.getElementById('id_producto').innerHTML = '<option value="">--- Selecciona un producto ---</option>';
+            return;
+        }
+        fetch(`/obtener_productos/?categoria_id=${categoriaId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            var productosSelect = document.getElementById('id_producto');
+            productosSelect.innerHTML = '<option value="">--- Selecciona un producto ---</option>';
+            data.productos.forEach(function (producto) {
+                var option = document.createElement('option');
+                option.value = producto.id;
+                option.textContent = producto.nombre;
+                productosSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error al obtener productos:', error);
+        });
+    });
+});
+</script>
+{% endblock %}
 {% endblock %}

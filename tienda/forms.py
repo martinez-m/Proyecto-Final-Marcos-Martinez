@@ -1,5 +1,5 @@
 from django import forms
-from .models import Producto, Cliente, Pedido
+from .models import Producto, Pedido, DetallePedido, Categoria
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
@@ -8,18 +8,42 @@ class ProductoForm(forms.ModelForm):
         model = Producto
         fields = '__all__'
 
-class ClienteForm(forms.ModelForm):
-    class Meta:
-        model = Cliente
-        fields = '__all__'
-
 class PedidoForm(forms.ModelForm):
+    categoria = forms.ModelChoiceField(
+        queryset=Categoria.objects.all(), 
+        required=True, 
+        label="Selecciona una categoría",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
     class Meta:
         model = Pedido
-        fields = ['cliente', 'productos', 'total'] 
+        fields = ['usuario', 'categoria']
+    def __init__(self, *args, **kwargs):
+        usuario_actual = kwargs.pop('usuario_actual', None)
+        super().__init__(*args, **kwargs)
+        if usuario_actual:
+            self.fields['usuario'].queryset = self.fields['usuario'].queryset.filter(id=usuario_actual.id)
+
+class DetallePedidoForm(forms.ModelForm):
+    producto = forms.ModelChoiceField(
+        queryset=Producto.objects.none(), 
+        required=True, 
+        label="Selecciona un producto"
+    )
+    class Meta:
+        model = DetallePedido
+        fields = ['producto', 'cantidad']
         widgets = {
-            'productos': forms.CheckboxSelectMultiple() 
-}
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        categoria = kwargs.pop('categoria', None)
+        super().__init__(*args, **kwargs)
+        if categoria:
+            self.fields['producto'].queryset = Producto.objects.filter(categoria=categoria)
+        else:
+            self.fields['producto'].queryset = Producto.objects.none()
 
 class CustomUserCreationForm(forms.ModelForm):
     password = forms.CharField(
@@ -52,10 +76,15 @@ class CustomUserCreationForm(forms.ModelForm):
         widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Fecha de nacimiento', 'type': 'date'}),
         label="Fecha de Nacimiento"
     )
-
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'birth_date', 'password']
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if User.objects.filter(username=username).exists():
+            raise ValidationError("El nombre de usuario ya está en uso. Por favor, elige otro.")
+        return username
 
     def clean(self):
         """
@@ -64,6 +93,16 @@ class CustomUserCreationForm(forms.ModelForm):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
-
         if password and confirm_password and password != confirm_password:
             raise ValidationError("Las contraseñas no coinciden.")
+        return cleaned_data
+
+    def save(self, commit=True):
+        """
+        Sobrescribir el método save para guardar el usuario con una contraseña encriptada.
+        """
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"]) 
+        if commit:
+            user.save()
+        return user

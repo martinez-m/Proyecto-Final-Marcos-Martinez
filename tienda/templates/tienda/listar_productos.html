@@ -1,38 +1,44 @@
 {% extends 'tienda/base.html' %}
 
+{% load static %}
+
 {% block content %}
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Catálogo de TechParts Store</h1>
-        {% if productos %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Catálogo de TechParts Store</h1>
+
+    {% if categorias %}
+        <div class="d-flex justify-content-center mb-4">
             {% for categoria in categorias %}
-                <h2 class="mt-4">{{ categoria.nombre }}</h2>
-                <p>{{ categoria.descripcion }}</p>
-                <table class="table table-striped mt-3">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Precio</th>
-                            <th>Descripción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for producto in productos %}
-                            {% if producto.categoria == categoria %}
-                                <tr>
-                                    <td>{{ producto.nombre }}</td>
-                                    <td>${{ producto.precio }}</td>
-                                    <td>{{ producto.descripcion }}</td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <a href="?categoria={{ categoria.id }}" 
+                    class="btn {% if categoria.id|stringformat:"s" == categoria_seleccionada %}btn-primary{% else %}btn-outline-primary{% endif %} me-2">
+                    {{ categoria.nombre }}
+                </a>
             {% endfor %}
-        {% else %}
-            <p class="text-center">No hay productos registrados aún.</p>
-        {% endif %}
+            <a href="{% url 'listar_productos' %}" class="btn {% if not categoria_seleccionada %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Todas las categorías
+            </a>
+        </div>
+    {% endif %}
 
-        <a href="{% url 'base' %}" class="btn btn-primary mt-4">Volver al inicio</a>
+    <div id="productos-container" class="row row-cols-1 row-cols-md-3 g-4">
+        {% for producto in productos %}
+            <div class="col producto-card" data-categoria="{{ producto.categoria.id }}">
+                <div class="card h-100">
+                    {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                    {% else %}
+                        <img src="{% static 'images/default_product.jpg' %}" class="card-img-top" alt="Producto sin imagen">
+                    {% endif %}
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                        <p class="card-text"><strong>${{ producto.precio }}</strong></p>
+                        <p class="card-text">{{ producto.descripcion }}</p>
+                        <p><strong>Categoría:</strong> {{ producto.categoria.nombre }}</p>
+                        <p><strong>Stock:</strong> {{ producto.stock }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
+</div>
 {% endblock %}
-

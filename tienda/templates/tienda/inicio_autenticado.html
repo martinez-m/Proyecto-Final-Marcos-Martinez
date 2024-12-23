@@ -1,10 +1,11 @@
 {% extends 'tienda/base.html' %}
 
-{% block title %}Panel de Usuario - Mi Tienda Online{% endblock %}
+{% block title %}Panel de Usuario - TechParts Store{% endblock %}
 
 {% block content %}
 <div class="text-center">
     <h2>¡Hola, {{ user.username }}!</h2>
-    <p>Accede a las opciones avanzadas de la tienda:</p>
+    <p>Accede a las opciones avanzadas de la tienda</p>
+    <a href="{% url 'listar_productos' %}" class="btn btn-primary">Catálogo</a>
 </div>
 {% endblock %}
