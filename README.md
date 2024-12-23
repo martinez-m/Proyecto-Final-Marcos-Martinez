@@ -28,28 +28,6 @@
 - Interacción con la barra de búsqueda  
 
 ---
-## 📚 **Instalación y Configuración**  
-1. Clona el repositorio:  
-   ```bash
-   git clone https://github.com/tu-usuario/tu-repo.git
-
-2. Navega al directorio del proyecto:
-   ```bash
-   cd TechParts-Store
-   
-3. Instala las dependencias:
-   ```bash
-   pip install -r requirements.txt
-
-4. Aplica las migraciones:
-   ```bash
-   python manage.py migrate
-
-5. Inicia el servidor:
-   ```bash
-   python manage.py runserver
-
----
 
 ## 🎥 **Video Demostración** 
 https://youtu.be/9OLT0d-6FCM?si=jBlx1e7_1GphPyVy
